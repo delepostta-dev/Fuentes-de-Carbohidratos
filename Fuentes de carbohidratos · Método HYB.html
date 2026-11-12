@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fuentes de carbohidratos · Método HYB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;600;700;800&family=Poppins:wght@400;500;600&display=swap">
+<style>
+:root{
+  /* Layout: banda oscura de marca arriba, filtros pegajosos, grilla de tarjetas que pasa a 1 columna en el celular */
+  --arena:#e8e5dc; --arena-2:#dddad1; --papel:#f4f2ec; --tinta:#1f1e1d; --tinta-2:#262626;
+  --gris:#5c5a55; --linea:#c4c0b5; --yema:#F2B21B;
+  --display:'League Spartan', 'Arial Narrow', sans-serif; --body:'Poppins', system-ui, sans-serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--arena);color:var(--tinta);font-family:var(--body);-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--yema);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header{background:var(--tinta);color:var(--arena);padding:28px 0 26px}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a8a49a}
+.hyb{display:flex;align-items:center;gap:8px;color:var(--arena);font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--yema);flex-shrink:0}
+header h1{font-size:clamp(38px,9vw,64px);line-height:.92;font-weight:800;letter-spacing:-.02em;margin-top:22px}
+.lead{margin-top:14px;font-size:15px;line-height:1.6;color:var(--arena-2);max-width:60ch}
+.ref{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
+.ref span{font-size:12px;border:1px solid #4a4844;border-radius:999px;padding:7px 12px;color:var(--arena-2)}
+.ref b{color:var(--yema);font-weight:600}
+.search{margin-top:20px;display:flex;align-items:center;gap:10px;background:var(--tinta-2);border-radius:999px;padding:0 16px;border:1px solid #3a3936}
+.search svg{flex-shrink:0}
+.search input{flex:1;min-width:0;height:48px;background:transparent;border:0;color:var(--arena);font:inherit;font-size:15px}
+.search input::placeholder{color:#a8a49a}
+.search input:focus{outline:none}
+.search:focus-within{border-color:var(--yema)}
+.bar{position:sticky;top:0;z-index:5;background:var(--arena);border-bottom:1px solid var(--linea)}
+.bar .wrap{padding-top:12px;padding-bottom:12px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.row::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid #8b877c;background:transparent;font-size:13px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--yema);border-color:var(--yema);font-weight:600}
+.chip.small{min-height:36px;font-size:12px;padding:0 14px}
+.chip.dark[aria-pressed="true"]{background:var(--tinta);color:var(--arena);border-color:var(--tinta)}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.count{font-size:13px;color:var(--gris)}
+.count b{color:var(--tinta)}
+.sort{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gris)}
+main{padding:24px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.card{background:var(--papel);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.card.top{box-shadow:inset 0 0 0 2px var(--tinta)}
+.c-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card h3{font-size:21px;font-weight:700;line-height:1.1}
+.portion{font-size:12px;color:var(--gris);margin-top:4px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0}
+.tag{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:4px 8px;white-space:nowrap}
+.tag.top{background:var(--tinta);color:var(--yema)}
+.tag.opt{border:1px solid var(--gris);color:var(--gris)}
+.tag.plus{background:var(--arena-2);color:var(--tinta)}
+.nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;text-align:center}
+.num{border-radius:12px;padding:10px 4px;background:var(--arena-2)}
+.num.p{background:var(--tinta);color:var(--arena)}
+.num strong{display:block;font-family:var(--display);font-weight:800;font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
+.num.p strong{color:var(--yema)}
+.num span{display:block;font-size:11px;margin-top:4px}
+.facts{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:#3a3936}
+.facts b{font-weight:600;color:var(--tinta)}
+details{border-top:1px solid var(--linea);padding-top:10px}
+summary{cursor:pointer;font-size:13px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:32px}
+summary::-webkit-details-marker{display:none}
+summary .chev{transition:transform .2s}
+details[open] summary .chev{transform:rotate(180deg)}
+.idea{margin-top:8px;background:var(--yema);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.55}
+.ctx{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.ctx span{font-size:11px;border:1px solid var(--linea);border-radius:999px;padding:3px 9px;color:var(--gris)}
+.empty{grid-column:1/-1;background:var(--papel);border-radius:18px;padding:28px;text-align:center;font-size:14px;color:var(--gris)}
+.empty button{margin-top:12px}
+section.combos{padding:28px 0 8px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sec-head h2{font-size:30px;font-weight:700}
+.sec-head p{font-size:13px;color:var(--gris)}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.combo{background:var(--tinta);color:var(--arena);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.combo .k{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--yema);font-weight:600}
+.combo p.t{font-size:15px;line-height:1.45;font-weight:500}
+.combo .g{display:flex;gap:12px;font-size:12px;color:var(--arena-2);margin-top:auto;padding-top:6px;border-top:1px solid #4a4844}
+.combo .g b{font-family:var(--display);font-size:18px;color:var(--yema)}
+footer{padding:28px 0 40px}
+footer .wrap{display:flex;flex-direction:column;gap:14px}
+.note{font-size:12px;line-height:1.6;color:var(--gris);max-width:70ch}
+.sign{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--linea);padding-top:14px;font-size:13px}
+.sign .hyb{color:var(--tinta)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (max-width:420px){.wrap{padding:0 16px}.card{padding:16px}.num strong{font-size:22px}}
+@media print{.bar,.search{display:none}header{background:none;color:var(--tinta)}.card{break-inside:avoid}details{display:block}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top"><span>Recurso para alumnos</span><span class="hyb"><span class="dot"></span>Método HYB</span></div>
+    <h1>Fuentes de carbohidratos</h1>
+    <p class="lead">Son la energía para entrenar y rendir en el día. Acá no se sacan: se elige bien y se le pone tamaño. Cada opción tiene su porción real, los gramos de carbohidratos y las calorías.</p>
+    <div class="ref">
+      <span><b>1 mano ahuecada</b> ≈ 25 g de carbohidratos</span>
+      <span>Por comida: <b>1 a 2 manos</b></span>
+    </div>
+    <label class="search" for="q">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a8a49a" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="q" type="search" placeholder="Buscar: arroz, papa, avena…" autocomplete="off" aria-label="Buscar alimento">
+    </label>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="row" id="ctxRow" role="group" aria-label="Filtrar por contexto"></div>
+    <div class="row" id="typeRow" role="group" aria-label="Filtrar por tipo de alimento"></div>
+    <div class="meta">
+      <p class="count" id="count" aria-live="polite"></p>
+      <div class="sort" role="group" aria-label="Ordenar">
+        <span>Ordenar:</span>
+        <button class="chip small dark" data-sort="sac" aria-pressed="true">Más saciante</button>
+        <button class="chip small dark" data-sort="kcal" aria-pressed="false">Menos calorías</button>
+        <button class="chip small dark" data-sort="easy" aria-pressed="false">Más práctico</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+    <div class="grid" id="grid"></div>
+  </div>
+</main>
+
+<section class="combos">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Combos listos</h2>
+      <p id="comboHint">Carbohidrato + proteína, para no pensar.</p>
+    </div>
+    <div class="cgrid" id="cgrid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="note">Los valores son aproximados y cambian según la marca y la cocción. Arroz, fideos, legumbres y tubérculos están medidos en cocido; avena, polenta y granola, en seco. Mirá la etiqueta cuando la tengas. Si te llenás rápido y te cuesta llegar, elegí lo más práctico; si te cuesta controlar el hambre, priorizá lo más saciante. Lo marcado como <b>Opcional</b> sirve igual, pero cuesta más conseguirlo o es de temporada.</p>
+    <div class="sign"><span>@juanmaasolis</span><span class="hyb"><span class="dot"></span>Método HYB</span></div>
+  </div>
+</footer>
+
+<script>
+const CTX = {rapido:'Sin tiempo', casa:'En casa', trabajo:'Trabajo o calle', tanda:'En tanda', pre:'Antes de entrenar'};
+const TYPE = {granos:'Granos y cereales', pan:'Panificados', tuberculos:'Papa, boniato y cía.', legumbres:'Legumbres', frutas:'Frutas', snacks:'Snacks y rápidos'};
+const EASE = {1:'Abrir y listo', 2:'10–20 min', 3:'Para cocinar en tanda'};
+const SAC = {3:'alta', 2:'media', 1:'baja'};
+
+const FOODS = [
+ {n:'Arroz blanco', t:'granos', por:'1 taza cocido (160 g)', c:45, k:205, f:1, s:2, e:2, $:'$', ctx:['casa','trabajo','tanda'], top:1, idea:'Hacé una olla para 3 días y guardalo en la heladera. Frío y recalentado llena un poco más y cae más liviano.'},
+ {n:'Arroz integral', t:'granos', por:'1 taza cocido (160 g)', c:37, k:175, f:3, s:3, e:3, $:'$', ctx:['casa','trabajo','tanda'], idea:'Tarda 35–40 minutos: ideal para cocinar en tanda. Más fibra que el blanco, así que te dura más la saciedad.'},
+ {n:'Fideos', t:'granos', por:'1 taza cocidos (140 g)', c:43, k:220, f:2, s:2, e:2, $:'$', ctx:['casa'], idea:'Servite primero la proteína y la verdura, los fideos al final. Al dente llenan más. Los integrales suman fibra.'},
+ {n:'Avena', t:'granos', por:'½ taza en seco (40 g)', c:27, k:150, f:4, s:3, e:1, $:'$', ctx:['casa','trabajo','rapido','pre'], top:1, idea:'Con leche o yogur y una fruta, cocida o cruda. Sumá proteína (yogur, leche en polvo o whey) y tenés el desayuno resuelto.'},
+ {n:'Polenta', t:'granos', por:'40 g en seco (1 plato servido)', c:31, k:145, f:1, s:2, e:1, $:'$', ctx:['casa','rapido'], idea:'La instantánea está en 5 minutos. Con tuco y carne picada o con un huevo arriba.'},
+ {n:'Cuscús', t:'granos', por:'1 taza hidratado (160 g)', c:36, k:175, f:2, s:2, e:1, $:'$$', ctx:['casa','trabajo','rapido'], idea:'Se hidrata en agua caliente en 5 minutos. En ensalada fría con verduras y pollo o atún.'},
+ {n:'Quinoa', t:'granos', por:'1 taza cocida (185 g)', c:39, k:220, f:5, s:3, e:2, $:'$$$', ctx:['casa','trabajo','tanda'], opt:1, plus:1, idea:'15 minutos de cocción. Tiene algo más de proteína que el arroz. Como base de ensaladas frías.'},
+ {n:'Granola sin azúcar agregada', t:'granos', por:'½ taza (40 g)', c:26, k:180, f:3, s:2, e:1, $:'$$', ctx:['rapido','trabajo'], idea:'Arriba del yogur. Mirá la etiqueta: muchas tienen tanto azúcar como una galletita.'},
+ {n:'Pan integral', t:'pan', por:'2 rebanadas (60 g)', c:26, k:150, f:4, s:2, e:1, $:'$', ctx:['casa','trabajo','rapido'], top:1, idea:'Que diga harina integral como primer ingrediente. Ideal para tostadas con huevo, atún o ricota.'},
+ {n:'Pan blanco o flauta', t:'pan', por:'2 rebanadas o ¼ de flauta (60 g)', c:30, k:160, f:1, s:1, e:1, $:'$', ctx:['casa','rapido','pre'], idea:'No está prohibido: cuidá la porción. Antes de entrenar es una buena opción porque se digiere rápido.'},
+ {n:'Rapiditas o tortillas', t:'pan', por:'2 unidades (60 g)', c:30, k:180, f:2, s:2, e:1, $:'$$', ctx:['rapido','trabajo'], idea:'El wrap de los días sin tiempo: pollo, atún o huevo con verdura, enrollado en 3 minutos.'},
+ {n:'Galletas de arroz o maíz', t:'snacks', por:'4 unidades (36 g)', c:29, k:140, f:1, s:1, e:1, $:'$$', ctx:['rapido','trabajo','pre'], idea:'Llenan poco solas. Usalas de base con queso, ricota o atún para que sea una comida de verdad.'},
+ {n:'Papa', t:'tuberculos', por:'1 mediana cocida (170 g)', c:34, k:150, f:3, s:3, e:2, $:'$', ctx:['casa','tanda'], top:1, idea:'De los alimentos más saciantes que existen. Hervida o al horno. Fritas cambian todo: son otra comida.'},
+ {n:'Boniato', t:'tuberculos', por:'1 mediano cocido (150 g)', c:31, k:135, f:5, s:3, e:2, $:'$', ctx:['casa','tanda'], top:1, idea:'Al horno con cáscara, de a varios. Dura 4 días en la heladera y se recalienta en un minuto.'},
+ {n:'Calabaza o zapallo', t:'tuberculos', por:'2 tazas cocida (300 g)', c:21, k:90, f:3, s:3, e:2, $:'$', ctx:['casa','tanda'], top:1, idea:'Mucho volumen y pocas calorías. Al horno, en puré o en una bandeja con papa y boniato.'},
+ {n:'Mandioca', t:'tuberculos', por:'1 trozo cocido (100 g)', c:38, k:160, f:2, s:3, e:2, $:'$$', ctx:['casa'], idea:'Hervida y después dorada al horno. Rinde: con un trozo alcanza.'},
+ {n:'Choclo', t:'tuberculos', por:'1 choclo mediano o 1 taza de granos (150 g)', c:31, k:145, f:3, s:2, e:1, $:'$', ctx:['casa','trabajo','rapido'], idea:'De lata, escurrido, va a cualquier ensalada o wrap. Elegí el que no tiene azúcar agregada.'},
+ {n:'Lentejas', t:'legumbres', por:'1 taza cocida (200 g)', c:40, k:230, f:16, s:3, e:3, $:'$', ctx:['casa','tanda'], top:1, plus:1, idea:'Carbohidrato y proteína en uno. En guiso, ensalada fría o con arroz. Cocinalas en cantidad.'},
+ {n:'Garbanzos', t:'legumbres', por:'1 taza escurridos (165 g)', c:45, k:270, f:12, s:3, e:1, $:'$', ctx:['casa','trabajo','tanda'], plus:1, idea:'De lata: enjuagás y listo. En ensalada, hummus o al horno crocantes como snack.'},
+ {n:'Porotos', t:'legumbres', por:'1 taza cocidos (175 g)', c:40, k:220, f:13, s:3, e:1, $:'$', ctx:['casa','tanda'], plus:1, idea:'Los de lata te ahorran el remojo. Con arroz, en guiso o en ensalada.'},
+ {n:'Banana', t:'frutas', por:'1 mediana (120 g)', c:27, k:105, f:3, s:2, e:1, $:'$', ctx:['rapido','trabajo','pre'], top:1, idea:'El carbohidrato más práctico antes de entrenar: 30–60 minutos antes. También en la avena o en un licuado.'},
+ {n:'Manzana o pera', t:'frutas', por:'1 mediana (180 g)', c:25, k:95, f:4, s:2, e:1, $:'$', ctx:['rapido','trabajo'], idea:'Se lleva en la mochila sin que se aplaste. Con queso o un yogur es una merienda completa.'},
+ {n:'Naranja o mandarinas', t:'frutas', por:'1 naranja grande o 2 mandarinas (200 g)', c:24, k:95, f:4, s:2, e:1, $:'$', ctx:['casa','trabajo','rapido'], idea:'Mejor entera que en jugo: con la fibra llena mucho más.'},
+ {n:'Uvas o frutas de estación', t:'frutas', por:'1 taza (150 g)', c:27, k:105, f:2, s:1, e:1, $:'$$', ctx:['casa','rapido'], idea:'Frutillas, cerezas, duraznos: la que esté barata en la feria esa semana.'},
+ {n:'Dátiles', t:'frutas', por:'4 unidades (30 g)', c:22, k:85, f:2, s:1, e:1, $:'$$', ctx:['rapido','pre'], idea:'Energía rápida antes de entrenar si no comiste. Llevate 3 o 4 en la mochila.'},
+ {n:'Pochoclos', t:'snacks', por:'3 tazas hechos (25 g de maíz)', c:19, k:95, f:4, s:2, e:2, $:'$', ctx:['casa'], idea:'Hechos en olla con poquito aceite o en microondas sin manteca. Mucho volumen por pocas calorías.'},
+ {n:'Miel o mermelada', t:'snacks', por:'1 cucharada (20 g)', c:16, k:60, f:0, s:1, e:1, $:'$', ctx:['pre','rapido'], idea:'Uso estratégico: en una tostada antes de entrenar. En el día a día, como algo puntual.'},
+ {n:'Castañas asadas', t:'snacks', por:'1 puñado grande (80 g)', c:42, k:195, f:4, s:2, e:2, $:'$$$', ctx:['casa'], opt:1, idea:'De temporada. A diferencia de otros frutos secos, son sobre todo carbohidrato, no grasa.'}
+];
+
+const COMBOS = [
+ {ctx:'pre', t:'Banana + 1 cucharada de miel, 30–60 min antes', g:43, x:'Se digiere rápido'},
+ {ctx:'pre', t:'2 tostadas con mermelada + yogur, 1 h antes', g:52, x:'Liviano'},
+ {ctx:'pre', t:'Avena con leche y banana, 2 h antes', g:64, x:'Desayuno pre entreno'},
+ {ctx:'rapido', t:'Rapiditas + atún + tomate', g:34, x:'3 min'},
+ {ctx:'rapido', t:'Galletas de arroz + ricota + manzana', g:54, x:'5 min'},
+ {ctx:'casa', t:'Merluza al horno + papa + ensalada', g:39, x:'20 min'},
+ {ctx:'casa', t:'Polenta con tuco y carne picada', g:35, x:'15 min'},
+ {ctx:'trabajo', t:'Tupper de arroz + pollo + verduras', g:53, x:'Llevás hecho'},
+ {ctx:'trabajo', t:'Wrap de pollo con choclo', g:45, x:'Llevás hecho'},
+ {ctx:'tanda', t:'Bandeja de papa, boniato y calabaza al horno', g:33, x:'Por porción · rinde 4'},
+ {ctx:'tanda', t:'Lentejas con arroz', g:62, x:'Por porción · rinde 4'}
+];
+
+const state = {ctx:null, type:null, sort:'sac', q:''};
+const $ = s => document.querySelector(s);
+const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const manos = c => { const v = Math.round(c/25*2)/2; if (v < 0.5) return '½'; const w = Math.floor(v); return v % 1 ? (w ? w+'½' : '½') : String(v); };
+
+function chip(label, pressed, onClick, cls){
+  const b = document.createElement('button');
+  b.className = 'chip' + (cls ? ' '+cls : '');
+  b.textContent = label;
+  b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+  b.addEventListener('click', onClick);
+  return b;
+}
+
+function renderChips(){
+  const cr = $('#ctxRow'); cr.innerHTML = '';
+  cr.appendChild(chip('Todo', !state.ctx, () => { state.ctx = null; update(); }));
+  Object.entries(CTX).forEach(([k,v]) => cr.appendChild(chip(v, state.ctx === k, () => { state.ctx = state.ctx === k ? null : k; update(); })));
+  const tr = $('#typeRow'); tr.innerHTML = '';
+  tr.appendChild(chip('Todos', !state.type, () => { state.type = null; update(); }, 'small dark'));
+  Object.entries(TYPE).forEach(([k,v]) => tr.appendChild(chip(v, state.type === k, () => { state.type = state.type === k ? null : k; update(); }, 'small dark')));
+  document.querySelectorAll('[data-sort]').forEach(b => b.setAttribute('aria-pressed', b.dataset.sort === state.sort ? 'true' : 'false'));
+}
+
+function card(f){
+  const el = document.createElement('article');
+  el.className = 'card' + (f.top ? ' top' : '');
+  const m = manos(f.c);
+  const tags = (f.top ? '<span class="tag top">Top HYB</span>' : '') + (f.plus ? '<span class="tag plus">+ Proteína</span>' : '') + (f.opt ? '<span class="tag opt">Opcional</span>' : '');
+  el.innerHTML = `
+    <div class="c-head">
+      <div><h3>${f.n}</h3><p class="portion">${f.por}</p></div>
+      <div class="tags">${tags}</div>
+    </div>
+    <div class="nums">
+      <div class="num p"><strong>${f.c} g</strong><span>carbohidratos</span></div>
+      <div class="num"><strong>${f.k}</strong><span>kcal</span></div>
+      <div class="num"><strong>${m}</strong><span>${m === '1' || m === '½' ? 'mano' : 'manos'}</span></div>
+    </div>
+    <p class="facts"><span><b>${EASE[f.e]}</b></span><span>Saciedad <b>${SAC[f.s]}</b></span><span>Fibra <b>${f.f} g</b></span><span>Costo <b>${f.$}</b></span></p>
+    <details>
+      <summary>Cómo usarlo <svg class="chev" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg></summary>
+      <p class="idea">${f.idea}</p>
+      <div class="ctx"><span>${TYPE[f.t]}</span>${f.ctx.map(c => `<span>${CTX[c]}</span>`).join('')}</div>
+    </details>`;
+  return el;
+}
+
+function update(){
+  renderChips();
+  const q = norm(state.q.trim());
+  let list = FOODS.filter(f => (!state.ctx || f.ctx.includes(state.ctx)) && (!state.type || f.t === state.type) && (!q || norm(f.n + ' ' + f.idea + ' ' + TYPE[f.t]).includes(q)));
+  const sorters = {sac:(a,b)=>b.s-a.s || b.f-a.f, kcal:(a,b)=>a.k-b.k, easy:(a,b)=>a.e-b.e || b.s-a.s};
+  list.sort((a,b) => (a.opt||0)-(b.opt||0) || sorters[state.sort](a,b));
+  const g = $('#grid'); g.innerHTML = '';
+  if (!list.length){
+    const e = document.createElement('div'); e.className = 'empty';
+    e.innerHTML = '<p>No hay opciones con esos filtros.</p>';
+    e.appendChild(chip('Ver todas', false, () => { state.ctx = null; state.type = null; state.q = ''; $('#q').value = ''; update(); }));
+    g.appendChild(e);
+  } else list.forEach(f => g.appendChild(card(f)));
+  $('#count').innerHTML = `<b>${list.length}</b> ${list.length === 1 ? 'opción' : 'opciones'}${state.ctx ? ' · ' + CTX[state.ctx] : ''}${state.type ? ' · ' + TYPE[state.type] : ''}`;
+  const cs = state.ctx ? COMBOS.filter(c => c.ctx === state.ctx) : COMBOS;
+  $('#comboHint').textContent = state.ctx ? `Para: ${CTX[state.ctx].toLowerCase()}.` : 'Carbohidrato + proteína, para no pensar.';
+  const cg = $('#cgrid'); cg.innerHTML = '';
+  if (!cs.length) { cg.innerHTML = '<p class="note">Todavía no hay combos para este filtro.</p>'; }
+  cs.forEach(c => { const d = document.createElement('div'); d.className = 'combo';
+    d.innerHTML = `<span class="k">${CTX[c.ctx]}</span><p class="t">${c.t}</p><p class="g"><span><b>≈${c.g} g</b> carbohidratos</span><span>${c.x}</span></p>`; cg.appendChild(d); });
+}
+
+document.querySelectorAll('[data-sort]').forEach(b => b.addEventListener('click', () => { state.sort = b.dataset.sort; update(); }));
+$('#q').addEventListener('input', e => { state.q = e.target.value; update(); });
+update();
+</script>
+</body>
+</html>
